@@ -1,0 +1,84 @@
+:root {
+    --neon: #00ff41;
+    --bg: #080808;
+    --panel: rgba(15, 15, 15, 0.9);
+    --border: rgba(0, 255, 65, 0.2);
+    --danger: #ff3e3e;
+}
+
+body {
+    background-color: var(--bg);
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.mono { font-family: 'Fira Code', monospace; }
+
+/* --- BACKGROUND THREAT MAP --- */
+#threat-map {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    opacity: 0.25;
+    transition: all 0.6s ease;
+}
+
+/* --- CRT OVERLAY --- */
+.crt-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 4px; pointer-events: none; z-index: 100; opacity: 0.1;
+}
+
+.glass-panel {
+    background: var(--panel);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+/* --- SKILL TAGS --- */
+.skill-tag {
+    background: rgba(0, 255, 65, 0.05);
+    border: 1px solid rgba(0, 255, 65, 0.2);
+    padding: 2px 8px;
+    font-size: 10px;
+    font-family: 'Fira Code', monospace;
+    color: var(--neon);
+    border-radius: 2px;
+    display: inline-block;
+    margin: 1px;
+}
+
+/* --- FOCUS MODE --- */
+.dimmed { 
+    opacity: 0.05 !important; 
+    filter: blur(8px); 
+    pointer-events: none; 
+}
+
+.focused-card {
+    position: fixed !important; top: 50% !important; left: 50% !important;
+    transform: translate(-50%, -50%) scale(1.05) !important;
+    z-index: 500; width: 90%; max-width: 800px;
+    background: #0a0a0a !important; border-color: var(--neon) !important;
+    box-shadow: 0 0 50px rgba(0, 255, 65, 0.2);
+}
+
+.close-btn { display: none; }
+.focused-card .close-btn { display: block; }
+.focused-card .briefing-content { display: block !important; }
+
+/* --- ANIMATIONS --- */
+.scan-line {
+    width: 100%; height: 2px; background: var(--neon);
+    position: absolute; top: 0; left: 0; opacity: 0.2;
+    animation: scan 4s linear infinite;
+}
+@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+.redacted {
+    background-color: var(--neon); color: var(--neon);
+    transition: all 0.2s; cursor: pointer;
+}
+.redacted:hover { background-color: transparent; color: white; }

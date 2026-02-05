@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC_OPERATIONS // PORTFOLIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="p-4 md:p-8">
+    <canvas id="threat-map"></canvas>
+    <div class="crt-overlay"></div>
+
+    <header id="main-header" class="flex justify-between items-center mb-12 max-w-7xl mx-auto border-b border-white/5 pb-6">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tighter mono text-white uppercase">SYSTEM_OPERATOR: <span class="text-green-500">YOUR_NAME</span></h1>
+            <p class="text-[10px] mono text-gray-500 uppercase tracking-widest mt-1">Status: Authorized_Access // Role: Cyber Security & Forensics</p>
+        </div>
+        <nav class="hidden md:flex gap-8 mono text-[11px] text-gray-400">
+            <a href="mailto:your-email@example.com" class="text-green-500 border border-green-500/30 px-3 py-1 hover:bg-green-500 hover:text-black transition-all">ESTABLISH_UPLINK</a>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <aside id="sidebar" class="lg:col-span-4 space-y-6 transition-all">
+            <div class="glass-panel p-6 relative overflow-hidden">
+                <div class="scan-line"></div>
+                <h2 class="text-xs font-bold mono text-green-500 mb-6 uppercase tracking-widest border-b border-green-900/30 pb-2">Technical_Arsenal</h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-[11px] font-bold mb-2 text-white uppercase">Forensics & Analysis</h3>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="skill-tag">Autopsy</span><span class="skill-tag">FTK_Imager</span>
+                            <span class="skill-tag">EnCase</span><span class="skill-tag">Artifact_Recovery</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-[11px] font-bold mb-2 text-white uppercase">Network & Infrastructure</h3>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="skill-tag">Wireshark</span><span class="skill-tag">Tcpdump</span>
+                            <span class="skill-tag">Cisco_IOS</span><span class="skill-tag">VLAN</span>
+                            <span class="skill-tag">Linux_CLI</span><span class="skill-tag">VMware</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-[11px] font-bold mb-2 text-white uppercase">Security Frameworks</h3>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="skill-tag">NCSC_Standards</span><span class="skill-tag">OWASP_Top_10</span>
+                            <span class="skill-tag">ISO_27001</span><span class="skill-tag">CIA_Triad</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 mono text-[10px] text-gray-500">
+                <p class="mb-2 text-green-500">> SECURITY_CHECK: PASSED</p>
+                <p class="mb-2">> INTEGRITY_LEVEL: HIGH</p>
+                <div id="log-entries" class="opacity-40 space-y-1"></div>
+            </div>
+        </aside>
+
+        <section id="content-grid" class="lg:col-span-8 space-y-8 transition-all">
+            <h2 class="text-xs font-bold mono text-gray-500 mb-2 uppercase tracking-widest">Active_Operations (Academic Projects)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="project-card glass-panel p-6 cursor-pointer hover:border-green-500 group relative" onclick="focusCard(this)">
+                    <button class="close-btn absolute top-4 right-4 text-red-500 mono text-xs hover:underline"> [X] CLOSE_BRIEFING</button>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] mono text-red-500 font-bold">OP_ID-IDS</span>
+                        <span class="text-[10px] mono border border-amber-500/30 px-2 text-amber-500">IN_PROGRESS</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-white group-hover:text-green-500 transition-colors">Dialogue-Based IDS</h3>
+                    <p class="text-sm text-gray-400 line-clamp-2">Development of an Intelligent Dialogue Based Intrusion Detection System for proactive threat monitoring.</p>
+                    <div class="briefing-content hidden mt-6 border-t border-green-900/30 pt-6">
+                        <p class="text-sm text-gray-300 leading-relaxed">Developing an advanced IDS framework that utilizes intelligent dialogue logic to identify and categorize unauthorized network movements.</p>
+                    </div>
+                </div>
+
+                <div class="project-card glass-panel p-6 cursor-pointer hover:border-green-500 group relative" onclick="focusCard(this)">
+                    <button class="close-btn absolute top-4 right-4 text-red-500 mono text-xs hover:underline"> [X] CLOSE_BRIEFING</button>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] mono text-red-500 font-bold">OP_AUTO-VULN</span>
+                        <span class="text-[10px] mono border border-amber-500/30 px-2 text-amber-500">IN_PROGRESS</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-white">Vulnerability Ecosystem</h3>
+                    <p class="text-sm text-gray-400 line-clamp-2">An Autonomous Vulnerability Management Ecosystem for continuous network hardening.</p>
+                    <div class="briefing-content hidden mt-6 border-t border-green-900/30 pt-6">
+                        <p class="text-sm text-gray-300 leading-relaxed">Architecting an automated system to detect, prioritize, and report system flaws autonomously, mapping findings directly to CIA Triad impacts.</p>
+                    </div>
+                </div>
+
+                <div class="project-card glass-panel p-6 cursor-pointer hover:border-green-500 group relative" onclick="focusCard(this)">
+                    <button class="close-btn absolute top-4 right-4 text-red-500 mono text-xs hover:underline"> [X] CLOSE_BRIEFING</button>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] mono text-green-500 font-bold">OP_SEC-ECOMM</span>
+                        <span class="text-[10px] mono border border-green-500/30 px-2 text-green-500">COMPLETE</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-white">Vulnerable Ecommerce Lab</h3>
+                    <p class="text-sm text-gray-400 line-clamp-2">Built a controlled environment to demonstrate <span class="redacted">SQLi</span> and <span class="redacted">XSS</span> vulnerabilities.</p>
+                    <div class="briefing-content hidden mt-6 border-t border-green-900/30 pt-6">
+                        <p class="text-sm text-gray-300">Environment used for practical penetration testing, demonstrating the impact of insecure coding on databases.</p>
+                    </div>
+                </div>
+
+                <div class="project-card glass-panel p-6 cursor-pointer hover:border-green-500 group relative" onclick="focusCard(this)">
+                    <button class="close-btn absolute top-4 right-4 text-red-500 mono text-xs hover:underline"> [X] CLOSE_BRIEFING</button>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] mono text-green-500 font-bold">OP_BLOCK-CHAIN</span>
+                        <span class="text-[10px] mono border border-green-500/30 px-2 text-green-500">COMPLETE</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-white">Blockchain Security Ledger</h3>
+                    <p class="text-sm text-gray-400 line-clamp-2">Implementation of a decentralized ledger system focusing on data integrity and cryptography.</p>
+                    <div class="briefing-content hidden mt-6 border-t border-green-900/30 pt-6">
+                        <p class="text-sm text-gray-300">Focused on implementing RSA and SHA-256 protocols to ensure the immutability of recorded data.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="timeline-sec" class="mt-12 transition-all">
+                <h2 class="text-xs font-bold mono text-gray-500 mb-6 uppercase tracking-widest border-b border-green-900/10 pb-2">Service_History_Log</h2>
+                <div class="space-y-8">
+                    <div class="flex gap-6">
+                        <div class="mono text-green-500 text-[10px] w-32 pt-1 shrink-0">[ 2022 - 2026 ]</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white uppercase tracking-tight">BEng (Hons) Cybersecurity & Forensics</h4>
+                            <p class="text-[10px] text-green-500/70 mono">Edinburgh Napier University</p>
+                            <p class="text-xs text-gray-400 mt-1">Specializing in evidence acquisition, network traffic analysis, and forensic reporting.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="mono text-red-500 text-[10px] w-32 pt-1 shrink-0">[ 2023 - PRESENT ]</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white uppercase tracking-tight">Operations Supervisor | Scotmid Co-operative</h4>
+                            <p class="text-xs text-gray-400 mt-2 leading-relaxed">Security-cleared keyholder managing physical and operational integrity.</p>
+                            <ul class="text-[10px] text-gray-500 mt-2 space-y-1 mono">
+                                <li>> Managed secure access control and alarm system protocols.</li>
+                                <li>> Conducted rigorous compliance audits for regulatory standards.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="mono text-gray-600 text-[10px] w-32 pt-1 shrink-0">[ EDUCATION ]</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-300 uppercase">Leith Academy</h4>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="skill-tag">Higher Maths</span><span class="skill-tag">Higher Computer Science</span><span class="skill-tag">Higher Admin & IT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="overlay-bg" class="fixed inset-0 bg-black/80 hidden z-[400] backdrop-blur-md"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
