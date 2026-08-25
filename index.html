@@ -1,306 +1,492 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEC_OPERATIONS // PORTFOLIO</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Muhammad Ahmed Khalid, Cyber Security Analyst</title>
+    <meta name="description" content="Portfolio of Muhammad Ahmed Khalid, First Class Honours Cybersecurity graduate. SOC, detection engineering, ML-based intrusion detection." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-[#080808] text-[#e0e0e0] overflow-x-hidden">
-    
-    <canvas id="threat-map"></canvas>
-    <div id="mouse-glow" class="fixed pointer-events-none z-[1] w-[600px] h-[600px] rounded-full opacity-30 blur-[120px] bg-green-500/10 transition-opacity duration-500"></div>
-    <div class="crt-overlay"></div>
+<body>
 
-    <div id="splash-screen" class="fixed inset-0 z-[2000] bg-[#030303] flex flex-col items-center justify-center transition-all duration-1000 overflow-hidden">
-        
-        <div class="absolute inset-0 pointer-events-none opacity-20">
-            <div class="scanner-line"></div>
-            <div class="reticle-box top-left"></div>
-            <div class="reticle-box top-right"></div>
-            <div class="reticle-box bottom-left"></div>
-            <div class="reticle-box bottom-right"></div>
-        </div>
-
-        <div id="login-container" class="text-center z-10 p-4 transition-all duration-500">
-            <div class="mb-2 mono text-[10px] text-green-500/40 tracking-widest uppercase animate-pulse">
-                System_Handshake_Initialised // 0xAF44
-            </div>
-
-            <h1 class="text-5xl md:text-8xl font-bold tracking-tighter text-white mb-4" id="decrypt-name">[ENCRYPTED]</h1>
-            
-            <p class="text-[10px] mono text-green-500/40 mb-12 tracking-[0.4em] uppercase animate-pulse">
-                Authorized Personnel Only
-            </p>
-            
-            <button id="auth-trigger" onclick="startBypassSequence()" class="login-trigger group px-12 py-5 mono text-sm text-white border border-white/20 hover:border-green-500 hover:shadow-[0_0_20px_rgba(0,255,65,0.2)] transition-all duration-500 relative overflow-hidden">
-                <span id="btn-text" class="relative z-10">> BYPASS_SECURITY</span>
-                <div id="progress-bar" class="absolute bottom-0 left-0 h-1 bg-green-500 w-0 transition-all duration-[1200ms]"></div>
-            </button>
-            
-            <div id="init-logs" class="fixed bottom-8 left-8 text-left h-24 overflow-hidden text-[10px] mono text-green-500/40 hidden">
-                <div id="log-scroll" class="space-y-1"></div>
-            </div>
+    <!-- LIVE ALERT TICKER (top strip) -->
+    <div class="ticker" id="ticker">
+        <div class="ticker-track" id="ticker-track">
+            <!-- populated by JS -->
         </div>
     </div>
 
-    <div id="portfolio-main" class="opacity-0 transition-opacity duration-1000 invisible">
-        
-        <nav id="main-nav" class="fixed top-0 left-0 w-full z-[100] border-b border-white/5 bg-[#080808]/40 backdrop-blur-xl px-8 py-6 md:px-12 flex justify-between items-center mono text-xs md:text-sm">
-			<div id="scroll-progress" class="absolute top-0 left-0 h-[2px] bg-green-500 w-0 transition-all duration-75"></div>
-			
-			<span class="text-white font-bold tracking-tighter uppercase header-title">
-				OP_REPORT // <span id="nav-operator-name" class="text-white">Ahmed k.</span>
-			</span>
-			
-			<div class="flex items-center gap-6 md:gap-12">
-				<div class="flex gap-8 text-gray-500 uppercase tracking-widest font-medium">
-					<a href="#about" class="hover:text-green-500 transition-colors">About</a>
-					<a href="#projects" class="hover:text-green-500 transition-colors">Projects</a>
-					<a href="#skills" class="hover:text-green-500 transition-colors">Arsenal</a>
-					<a href="#timeline" class="hover:text-green-500 transition-colors">History</a>
-					<a href="javascript:void(0)" class="hover:text-green-500 transition-colors">Contact Me</a>
-				</div>
-			</div>
-		</nav>
+    <!-- APP SHELL: SIDEBAR + MAIN + RIGHT RAIL -->
+    <div class="app-shell">
 
-        <section id="about" class="min-h-screen flex flex-col justify-center px-8 md:px-24 pt-20">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center reveal">
-                <div class="lg:col-span-7">
-                    <h2 class="text-xs font-bold mono text-green-500 mb-8 uppercase tracking-[0.4em] cyber-ray">Background_Report</h2>
-                    <div class="max-w-4xl">
-                        <p class="text-3xl md:text-5xl font-bold text-white leading-tight">
-                            Securing the digital frontier through <span class="text-green-500 glow-text">Forensics</span> and <span class="text-green-500 glow-text">Automated Intelligence</span>.
-                        </p>
-                        <p class="text-lg text-gray-400 mt-8 leading-relaxed">
-                            Currently pursuing BEng (Hons) in Cybersecurity & Forensics at <span class="text-white">Edinburgh Napier University</span>. Focused on evidence acquisition, network analysis, and building proactive defense systems.
-                        </p>
-                    </div>
+        <!-- LEFT SIDEBAR: OPERATOR IDENTITY + NAV -->
+        <aside class="sidebar">
+            <div class="operator-card">
+                <div class="operator-avatar">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar-initials">MK</div>
+                    <div class="status-dot" title="Available"></div>
                 </div>
+                <div class="operator-meta">
+                    <div class="operator-name">Muhammad Ahmed Khalid</div>
+                    <div class="operator-role">Cyber Security Analyst</div>
+                    <div class="operator-loc"><span class="pin">◉</span> Edinburgh, UK</div>
+                </div>
+                <div class="operator-badges">
+                    <span class="badge badge-green">Open to Work</span>
+                    <span class="badge badge-blue">First Class Hons</span>
+                </div>
+            </div>
 
-                <div class="lg:col-span-5 float-animation">
-                    <div class="glass-panel p-6 relative overflow-hidden h-[400px] border-l-4 border-green-500/50 hover:shadow-[0_0_30px_rgba(0,255,65,0.2)] transition-shadow duration-500">
-                        <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
-                            <span class="text-[10px] mono text-green-500 font-bold uppercase tracking-widest">Live_Forensic_Uplink</span>
-                            <span class="text-[9px] mono text-gray-500 animate-pulse">STATUS: ACTIVE</span>
+            <nav class="side-nav">
+                <a href="#overview" class="nav-item active" data-target="overview">
+                    <span class="nav-icon">▤</span><span>Overview</span>
+                </a>
+                <a href="#incidents" class="nav-item" data-target="incidents">
+                    <span class="nav-icon">▲</span><span>Case Files</span>
+                    <span class="nav-count" id="count-incidents">5</span>
+                </a>
+                <a href="#detection-rules" class="nav-item" data-target="detection-rules">
+                    <span class="nav-icon">◆</span><span>Detection Rules</span>
+                </a>
+                <a href="#timeline" class="nav-item" data-target="timeline">
+                    <span class="nav-icon">◊</span><span>Activity Log</span>
+                </a>
+                <a href="#uplink" class="nav-item" data-target="uplink">
+                    <span class="nav-icon">✉</span><span>Secure Uplink</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-foot">
+                <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+                    <span class="tt-icon">☾</span>
+                    <span class="tt-label">Dark</span>
+                </button>
+                <div class="build-tag">v2.0 · SOC Dashboard</div>
+            </div>
+        </aside>
+
+        <!-- MAIN COLUMN -->
+        <main class="main">
+
+            <!-- HEADER STRIP -->
+            <header class="page-header">
+                <div class="crumbs">
+                    <span>Portfolio</span>
+                    <span class="crumb-sep">/</span>
+                    <span class="crumb-current" id="crumb-current">Overview</span>
+                </div>
+                <div class="header-right">
+                    <button class="quick-link tour-btn" id="header-tour" title="Walk through the site in 30 seconds">👋 Guided Tour</button>
+                    <div class="clock">
+                        <span class="clock-label">GMT</span>
+                        <span class="clock-time" id="clock">--:--:--</span>
+                    </div>
+                    <a class="quick-link" href="https://github.com/AhmedMKA99" target="_blank" rel="noopener">GitHub ↗</a>
+                    <a class="quick-link" href="https://www.linkedin.com/in/ahmed-khalid-404721395/" id="linkedin-link" target="_blank" rel="noopener">LinkedIn ↗</a>
+                </div>
+            </header>
+
+            <!-- OVERVIEW SECTION -->
+            <section id="overview" class="panel-section active-section">
+
+                <!-- First-time visitor banner -->
+                <div class="welcome-banner" id="welcome-banner">
+                    <div class="wb-left">
+                        <div class="wb-icon">👋</div>
+                        <div>
+                            <div class="wb-title">First time here?</div>
+                            <div class="wb-text">
+                                This portfolio is designed to look like a Security Operations Centre dashboard.
+                                Each of my <b>projects</b> is presented as a <b>case file</b>, my <b>skills</b> are shown as
+                                <b>detection rules</b>, and everything else uses the same visual language.
+                                The content is real, the style is playful.
+                            </div>
                         </div>
-                        <div id="forensic-monitor" class="space-y-2 font-mono text-[10px] text-green-500/80 overflow-hidden h-full"></div>
-                        <div class="scan-line-v"></div>
                     </div>
+                    <div class="wb-right">
+                        <button class="cta primary small" id="start-tour">Take a 30-second tour</button>
+                        <button class="wb-dismiss" id="dismiss-banner" title="Dismiss">✕</button>
+                    </div>
+                </div>
+
+                <div class="kpi-row">
+                    <div class="kpi" title="I graduated in July 2026 with the highest UK undergraduate degree classification.">
+                        <div class="kpi-label">Degree</div>
+                        <div class="kpi-value">First Class</div>
+                        <div class="kpi-sub">BEng (Hons) Cybersecurity &amp; Forensics, top classification in the UK</div>
+                    </div>
+                    <div class="kpi" title="Public GitHub repositories, each documented so anyone can read the code and understand what it does.">
+                        <div class="kpi-label">Public Projects</div>
+                        <div class="kpi-value">5</div>
+                        <div class="kpi-sub">All on GitHub, each with a written explanation</div>
+                    </div>
+                    <div class="kpi" title="My honours dissertation was a system that identifies cyber attacks in network traffic. It correctly classified 98 out of every 100 events across 12 different attack types.">
+                        <div class="kpi-label">Best Result</div>
+                        <div class="kpi-value">98%</div>
+                        <div class="kpi-sub">Detection accuracy on my honours ML project (12 attack types)</div>
+                    </div>
+                    <div class="kpi" title="The dataset used to train and validate the model contained 2.1 million records of real network activity, roughly the population of Paris.">
+                        <div class="kpi-label">Data Handled</div>
+                        <div class="kpi-value">2.1M</div>
+                        <div class="kpi-sub">Real network records processed in the training pipeline</div>
+                    </div>
+                </div>
+
+                <div class="hero-row">
+                    <div class="hero-card">
+                        <div class="section-eyebrow">Who I Am, in 30 Seconds</div>
+                        <h1 class="hero-title">
+                            I build defensive cyber security systems and document them so others can rebuild them.
+                        </h1>
+                        <p class="hero-copy">
+                            I am <b>Muhammad Ahmed Khalid</b>, a First Class Honours cybersecurity graduate from Edinburgh Napier University.
+                            My <b>honours dissertation</b> was a machine learning system that watches network traffic and identifies cyber attacks with 98% accuracy across 12 attack types.
+                            I also run my own <b>Security Operations Centre lab at home</b>, monitoring Windows and Linux computers with the same tools (Wazuh, Sysmon) that professional analysts use.
+                            I am looking for my first role as a <b>junior SOC analyst</b>, <b>detection engineer</b>, or <b>security analyst</b> in Scotland.
+                        </p>
+                        <div class="hero-tags">
+                            <span class="tag" title="Security Information and Event Management. The main dashboard a SOC analyst uses to watch for threats.">SIEM (Wazuh)</span>
+                            <span class="tag" title="Spotting cyber attacks in log data or network traffic.">Threat Detection</span>
+                            <span class="tag" title="Day-to-day work of a Security Operations Centre analyst.">SOC Operations</span>
+                            <span class="tag" title="Programming language, my primary tool for data and automation.">Python</span>
+                            <span class="tag" title="Training a computer to recognise patterns, used here to spot attacks.">Machine Learning</span>
+                            <span class="tag" title="The industry-standard catalogue of attacker techniques used across the world.">MITRE ATT&amp;CK</span>
+                        </div>
+                        <div class="hero-cta">
+                            <a class="cta primary" href="#incidents" data-nav="incidents">See my projects →</a>
+                            <a class="cta ghost" href="#uplink" data-nav="uplink">Get in touch</a>
+                        </div>
+                    </div>
+
+                    <div class="hero-side">
+                        <div class="mini-panel">
+                            <div class="mp-header">
+                                <span class="mp-title">Live Signal</span>
+                                <span class="mp-pulse"></span>
+                            </div>
+                            <div class="mp-body" id="signal-stream">
+                                <!-- populated by JS -->
+                            </div>
+                        </div>
+
+                        <div class="mini-panel">
+                            <div class="mp-header">
+                                <span class="mp-title">System Focus</span>
+                            </div>
+                            <div class="mp-body focus-list">
+                                <div class="focus-item">
+                                    <span class="focus-dot green"></span>
+                                    <span>Junior SOC / Detection Analyst</span>
+                                </div>
+                                <div class="focus-item">
+                                    <span class="focus-dot amber"></span>
+                                    <span>AppSec / DevSecOps grad roles</span>
+                                </div>
+                                <div class="focus-item">
+                                    <span class="focus-dot blue"></span>
+                                    <span>Threat intelligence</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INCIDENTS / PROJECTS SECTION -->
+            <section id="incidents" class="panel-section">
+                <div class="section-eyebrow">Case Files</div>
+                <h2 class="section-title">My projects, presented as case files.</h2>
+                <p class="section-intro">
+                    Each card below is a real project I built. I have styled them like the case files a security analyst would open in a SIEM: the case ID is just a label, and the coloured tag on the right shows how complex or serious the project is. <b>Click any card</b> to open the full detail, including what technologies I used and what the outcome was.
+                </p>
+
+                <div class="filters">
+                    <button class="filter active" data-filter="all" title="Show every project">All</button>
+                    <button class="filter" data-filter="defensive" title="Projects that protect systems and detect attacks">Defensive</button>
+                    <button class="filter" data-filter="offensive" title="Projects that simulate attacks (ethical, in a lab)">Offensive</button>
+                    <button class="filter" data-filter="devsecops" title="Projects that automate security in the software delivery process">DevSecOps</button>
+                    <button class="filter" data-filter="ml" title="Projects using machine learning or AI">ML / AI</button>
+                </div>
+
+                <div class="cases" id="cases">
+                    <!-- populated by JS -->
+                </div>
+            </section>
+
+            <!-- DETECTION RULES / SKILLS SECTION -->
+            <section id="detection-rules" class="panel-section">
+                <div class="section-eyebrow">Detection Rule Library</div>
+                <h2 class="section-title">My skills, presented as detection rules.</h2>
+                <p class="section-intro">
+                    In a real Security Operations Centre, a "detection rule" is a saved definition of something the team is watching for. Here I have used the same format to list <b>my technical skills</b>. Each card shows a skill area, a short explanation, and the specific tools I have hands-on experience with (the small chips at the bottom). The tag on the right (<b>Core</b>, <b>Strong</b>, <b>Aware</b>) shows how confident I am in that area.
+                </p>
+
+                <div class="rules-grid">
+                    <div class="rule-card">
+                        <div class="rule-head">
+                            <span class="rule-id">RULE-001</span>
+                            <span class="rule-sev sev-hi">Core</span>
+                        </div>
+                        <div class="rule-name">SOC Operations &amp; SIEM</div>
+                        <div class="rule-desc">Wazuh SIEM deployment, endpoint agent enrollment, Sysmon and auditd telemetry, alert triage, threat hunting, incident response principles.</div>
+                        <div class="rule-hits">
+                            <span class="chip">Wazuh</span><span class="chip">Sysmon</span><span class="chip">auditd</span><span class="chip">MITRE ATT&amp;CK</span>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-head">
+                            <span class="rule-id">RULE-002</span>
+                            <span class="rule-sev sev-hi">Core</span>
+                        </div>
+                        <div class="rule-name">Threat Detection &amp; ML</div>
+                        <div class="rule-desc">Machine learning classifiers for intrusion detection (Random Forest, SVM), feature engineering on network flow data, model evaluation at scale.</div>
+                        <div class="rule-hits">
+                            <span class="chip">scikit-learn</span><span class="chip">Random Forest</span><span class="chip">Pandas</span><span class="chip">NumPy</span>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-head">
+                            <span class="rule-id">RULE-003</span>
+                            <span class="rule-sev sev-md">Strong</span>
+                        </div>
+                        <div class="rule-name">Offensive / Pen Testing</div>
+                        <div class="rule-desc">Hands on web application testing, vulnerability discovery and exploitation of OWASP Top 10 classes, network scanning and enumeration.</div>
+                        <div class="rule-hits">
+                            <span class="chip">Burp Suite</span><span class="chip">Nmap</span><span class="chip">Sqlmap</span><span class="chip">Kali Linux</span>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-head">
+                            <span class="rule-id">RULE-004</span>
+                            <span class="rule-sev sev-md">Strong</span>
+                        </div>
+                        <div class="rule-name">DevSecOps &amp; Automation</div>
+                        <div class="rule-desc">GitHub Actions CI/CD security gates, dependency and secret scanning, container image scanning, SBOM generation, CVE remediation.</div>
+                        <div class="rule-hits">
+                            <span class="chip">GitHub Actions</span><span class="chip">Snyk</span><span class="chip">Trivy</span><span class="chip">Gitleaks</span><span class="chip">SBOM</span>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-head">
+                            <span class="rule-id">RULE-005</span>
+                            <span class="rule-sev sev-md">Strong</span>
+                        </div>
+                        <div class="rule-name">Programming &amp; Full Stack</div>
+                        <div class="rule-desc">Backend, frontend, and data pipeline development across multiple stacks.</div>
+                        <div class="rule-hits">
+                            <span class="chip">Python</span><span class="chip">Flask</span><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">PHP</span><span class="chip">SQL</span>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-head">
+                            <span class="rule-id">RULE-006</span>
+                            <span class="rule-sev sev-lo">Aware</span>
+                        </div>
+                        <div class="rule-name">Networks &amp; Infrastructure</div>
+                        <div class="rule-desc">TCP/IP, subnetting, VLANs, firewall configuration (OPNsense), network segmentation, virtualised lab environments. Cisco CCNA aligned foundations.</div>
+                        <div class="rule-hits">
+                            <span class="chip">TCP/IP</span><span class="chip">VLANs</span><span class="chip">OPNsense</span><span class="chip">VirtualBox</span><span class="chip">Windows Server</span>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-head">
+                            <span class="rule-id">RULE-007</span>
+                            <span class="rule-sev sev-lo">Aware</span>
+                        </div>
+                        <div class="rule-name">Frameworks &amp; Standards</div>
+                        <div class="rule-desc">Working knowledge of MITRE ATT&amp;CK and OWASP Top 10. Foundational awareness of NIST CSF and ISO 27001.</div>
+                        <div class="rule-hits">
+                            <span class="chip">MITRE ATT&amp;CK</span><span class="chip">OWASP Top 10</span><span class="chip">NIST</span><span class="chip">ISO 27001</span>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-head">
+                            <span class="rule-id">RULE-008</span>
+                            <span class="rule-sev sev-lo">Aware</span>
+                        </div>
+                        <div class="rule-name">AI / LLM Integration</div>
+                        <div class="rule-desc">Integration of locally hosted large language models into applications, structured prompt engineering with numerical context grounding.</div>
+                        <div class="rule-hits">
+                            <span class="chip">Ollama</span><span class="chip">Mistral 7B</span><span class="chip">Prompt Eng</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TIMELINE SECTION -->
+            <section id="timeline" class="panel-section">
+                <div class="section-eyebrow">Activity Log</div>
+                <h2 class="section-title">My education and work history.</h2>
+                <p class="section-intro">
+                    A simple timeline of what I have been doing. Education on the left, paid work on the right. This is the plain version of what would be on a traditional CV.
+                </p>
+
+                <div class="tl-grid">
+                    <div>
+                        <h3 class="tl-col">Education</h3>
+                        <div class="tl-item">
+                            <div class="tl-dot green"></div>
+                            <div class="tl-when">2022 – 2026</div>
+                            <div class="tl-what">BEng (Hons) Cybersecurity &amp; Forensics</div>
+                            <div class="tl-where">Edinburgh Napier University</div>
+                            <div class="tl-detail">First Class Honours. Honours dissertation: machine learning IDS with a local LLM analyst assistant, 98% accuracy across 12 attack classes.</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="tl-col">Experience</h3>
+
+                        <div class="tl-item">
+                            <div class="tl-dot amber"></div>
+                            <div class="tl-when">Sep 2023 – Present</div>
+                            <div class="tl-what">Duty Supervisor (prev. CSA)</div>
+                            <div class="tl-where">Scotmid Co-operative, Edinburgh</div>
+                            <div class="tl-detail">Held a supervisory role continuously alongside a full time BEng. Cash handling, procedure adherence, incident reporting.</div>
+                        </div>
+
+                        <div class="tl-item">
+                            <div class="tl-dot blue"></div>
+                            <div class="tl-when">Jun 2025 – Oct 2025</div>
+                            <div class="tl-what">Self Employed, Ecommerce</div>
+                            <div class="tl-where">Independent</div>
+                            <div class="tl-detail">Ran an online ecommerce venture. Direct exposure to running a live digital business end to end.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- UPLINK / CONTACT SECTION -->
+            <section id="uplink" class="panel-section">
+                <div class="section-eyebrow">Secure Uplink</div>
+                <h2 class="section-title">Get in touch.</h2>
+                <p class="section-intro">
+                    The best way to reach me is on <b>LinkedIn</b>, that is where I keep my professional history and reply fastest. If you would rather see my code first, <b>GitHub</b> has all my public projects.
+                </p>
+
+                <div class="uplink-grid">
+                    <a class="uplink-card" href="https://github.com/AhmedMKA99" target="_blank" rel="noopener">
+                        <div class="uc-label">GitHub</div>
+                        <div class="uc-value">github.com/AhmedMKA99</div>
+                        <div class="uc-note">All portfolio projects live here, fully documented.</div>
+                    </a>
+
+                    <a class="uplink-card" href="https://www.linkedin.com/in/ahmed-khalid-404721395/" id="linkedin-link-2" target="_blank" rel="noopener">
+                        <div class="uc-label">LinkedIn</div>
+                        <div class="uc-value">linkedin.com/in/ahmed-khalid-404721395</div>
+                        <div class="uc-note">Professional profile and endorsements.</div>
+                    </a>
+                </div>
+
+                <div class="uplink-foot">
+                    <span>System uptime: continuous · No trackers, no analytics, no cookies.</span>
+                </div>
+            </section>
+
+            <footer class="page-footer">
+                <span>© Muhammad Ahmed Khalid, Edinburgh</span>
+                <span>Built from scratch, HTML/CSS/JS. Deployed via GitHub Pages.</span>
+            </footer>
+        </main>
+
+        <!-- RIGHT RAIL: ANALYST NOTES / STATUS -->
+        <aside class="rail">
+            <div class="rail-panel">
+                <div class="rail-head">Quick Facts</div>
+                <div class="rail-body">
+                    <p><span class="note-key">Currently:</span> Actively applying to junior cyber security roles across Scotland.</p>
+                    <p><span class="note-key">Available:</span> Immediately.</p>
+                    <p><span class="note-key">Right to work:</span> UK.</p>
+                    <p><span class="note-key">Shift work:</span> Comfortable with 24/7 shift patterns if the role requires it.</p>
                 </div>
             </div>
-        </section>
 
-		<section id="projects" class="py-32 px-8 md:px-24 reveal">
-			<h2 class="text-xs font-bold mono text-green-500 mb-12 uppercase tracking-[0.4em] cyber-ray">Active_Operations</h2>
-			
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-				<div class="project-card glass-panel p-8 cursor-pointer group relative overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,65,0.1)]"
-					 onclick="openProjectModal(this)"
-					 data-id="OP_ID-IDS"
-					 data-status="IN_PROGRESS"
-					 data-color="text-red-500"
-					 data-title="Dialogue-Based IDS"
-					 data-description="Development of an Intelligent Dialogue Based Intrusion Detection System for proactive threat monitoring."
-					 data-stack="Python, NLP, Wireshark"
-					 data-features="Linguistic traffic analysis | Intent-based threat scoring | Behavioral baseline modeling"
-					 data-link="#">
-					<div class="flex justify-between items-start mb-6">
-						<span class="text-[10px] mono text-red-500 font-bold tracking-widest uppercase">OP_ID-IDS</span>
-						<span class="text-[10px] mono border border-amber-500/30 px-2 py-1 text-amber-500 rounded-sm">IN_PROGRESS</span>
-					</div>
-					<h3 class="text-2xl font-bold text-white mb-4">Dialogue-Based IDS</h3>
-					<p class="text-sm text-gray-400 leading-relaxed line-clamp-2">Development of an Intelligent Dialogue Based Intrusion Detection System for proactive threat monitoring.</p>
-				</div>
-
-				<div class="project-card glass-panel p-8 cursor-pointer group relative overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,65,0.1)]"
-					 onclick="openProjectModal(this)"
-					 data-id="OP_AUTO-VULN"
-					 data-status="IN_PROGRESS"
-					 data-color="text-red-500"
-					 data-title="Vulnerability Ecosystem"
-					 data-description="Development of an Intelligent Dialogue Based Intrusion Detection System for proactive threat monitoring."
-					 data-stack="Python, NLP, Wireshark"
-					 data-features="Linguistic traffic analysis | Intent-based threat scoring | Behavioral baseline modeling"
-					 data-link="#">
-					 
-					<div class="flex justify-between items-start mb-6">
-						<span class="text-[10px] mono text-red-500 font-bold tracking-widest uppercase">OP_AUTO-VULN</span>
-						<span class="text-[10px] mono border border-amber-500/30 px-2 py-1 text-amber-500 rounded-sm">IN_PROGRESS</span>
-					</div>
-					<h3 class="text-2xl font-bold text-white mb-4">Vulnerability Ecosystem</h3>
-					<p class="text-sm text-gray-400 leading-relaxed line-clamp-2">An Autonomous Vulnerability Management Ecosystem for continuous network hardening.</p>
-				</div>
-
-				<div class="project-card glass-panel p-8 cursor-pointer group relative overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,65,0.1)]"
-					 onclick="openProjectModal(this)"
-					 data-id="OP_SEC-ECOMM"
-					 data-status="COMPLETE"
-					 data-color="text-green-500"
-					 data-title="Vulnerable Ecommerce Lab"
-					 data-description="Development of an Intelligent Dialogue Based Intrusion Detection System for proactive threat monitoring."
-					 data-stack="Python, NLP, Wireshark"
-					 data-features="Linguistic traffic analysis | Intent-based threat scoring | Behavioral baseline modeling"
-					 data-link="#">
-					 
-					<div class="flex justify-between items-start mb-6">
-						<span class="text-[10px] mono text-red-500 font-bold tracking-widest uppercase">OP_SEC-ECOMM</span>
-						<span class="text-[10px] mono border border-green-500/30 px-2 py-1 text-green-500 rounded-sm uppercase">COMPLETE</span>
-					</div>
-					<h3 class="text-2xl font-bold text-white mb-4">Vulnerable Ecommerce Lab</h3>
-					<p class="text-sm text-gray-400 leading-relaxed line-clamp-2">Built a controlled environment to demonstrate SQLi and XSS vulnerabilities.</p>
-				</div>
-
-				<div class="project-card glass-panel p-8 cursor-pointer group relative overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,65,0.1)]"
-					 onclick="openProjectModal(this)"
-					 data-id="OP_BLOCK-CHAIN"
-					 data-status="COMPLETE"
-					 data-color="text-green-500"
-					 data-title="Blockchain Security Ledger"
-					 data-description="Development of an Intelligent Dialogue Based Intrusion Detection System for proactive threat monitoring."
-					 data-stack="Python, NLP, Wireshark"
-					 data-features="Linguistic traffic analysis | Intent-based threat scoring | Behavioral baseline modeling"
-					 data-link="#">
-					 
-					<div class="flex justify-between items-start mb-6">
-						<span class="text-[10px] mono text-red-500 font-bold tracking-widest uppercase">OP_BLOCK-CHAIN</span>
-						<span class="text-[10px] mono border border-green-500/30 px-2 py-1 text-green-500 rounded-sm uppercase">COMPLETE</span>
-					</div>
-					<h3 class="text-2xl font-bold text-white mb-4">Blockchain Security Ledger</h3>
-					<p class="text-sm text-gray-400 leading-relaxed line-clamp-2">Implementation of a decentralized ledger system focusing on data integrity and cryptography.</p>
-				</div>
-			</div>
-		</section>
-
-		<div id="project-modal" class="fixed inset-0 z-[3000] hidden items-center justify-center p-4 md:p-8 transition-opacity duration-300 opacity-0">
-			<div class="absolute inset-0 bg-[#030303]/90 backdrop-blur-sm" onclick="closeProjectModal()"></div>
-			
-			<div class="modal-content glass-panel max-w-4xl w-full max-h-[90vh] overflow-y-auto relative z-10 p-8 md:p-12 border-t-4 border-green-500 transform scale-95 transition-all duration-300">
-				
-				<button onclick="closeProjectModal()" class="absolute top-6 right-6 text-gray-500 hover:text-green-500 transition-colors">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" /></svg>
-				</button>
-
-				<div class="flex flex-col gap-4 mb-8">
-					<div class="flex items-center gap-4">
-						<span id="m-id" class="text-xs mono text-green-500 font-bold tracking-widest"></span>
-						<span id="m-status" class="text-[10px] mono border px-2 py-1 rounded-sm"></span>
-					</div>
-					<h2 id="m-title" class="text-3xl md:text-4xl font-bold text-white"></h2>
-				</div>
-
-				<div class="mb-8">
-					<h4 class="text-xs mono text-gray-500 uppercase tracking-widest mb-4">Technologies_Used</h4>
-					<div id="m-stack" class="flex flex-wrap gap-2"></div>
-				</div>
-
-				<div class="mb-10">
-					 <h4 class="text-xs mono text-gray-500 uppercase tracking-widest mb-4">Operational_Briefing</h4>
-					<p id="m-desc" class="text-gray-300 leading-relaxed text-lg"></p>
-				</div>
-
-				<div class="mb-12 p-6 bg-green-500/5 border border-green-500/20 rounded-md">
-					<h4 class="text-xs mono text-green-500 uppercase tracking-widest mb-6">> Key_Objectives & Outcomes</h4>
-					<ul id="m-features" class="space-y-3 mono text-sm text-gray-400"></ul>
-				</div>
-
-				<a id="m-link" href="#" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 bg-green-500/10 border border-green-500/50 text-green-500 font-bold mono text-sm hover:bg-green-500 hover:text-black transition-all group">
-					<span>ACCESS_REPOSITORY // SOURCE_CODE</span>
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-				</a>
-
-			</div>
-		</div>
-
-        <section id="skills" class="py-32 px-8 md:px-24 bg-[#0a0a0a]/50 reveal">
-            <h2 class="text-xs font-bold mono text-green-500 mb-16 uppercase tracking-[0.4em] cyber-ray">Technical_Arsenal</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div>
-                    <h4 class="text-white mono text-sm mb-6 font-bold uppercase tracking-widest">Forensics</h4>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-tag">Autopsy</span><span class="skill-tag">FTK_Imager</span><span class="skill-tag">EnCase</span>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="text-white mono text-sm mb-6 font-bold uppercase tracking-widest">Infrastructure</h4>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-tag">Wireshark</span><span class="skill-tag">Cisco_IOS</span><span class="skill-tag">Linux_CLI</span>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="text-white mono text-sm mb-6 font-bold uppercase tracking-widest">Frameworks</h4>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-tag">NCSC_Standards</span><span class="skill-tag">OWASP_Top_10</span><span class="skill-tag">CIA_Triad</span>
-                    </div>
+            <div class="rail-panel">
+                <div class="rail-head">Colour Legend</div>
+                <div class="rail-body legend">
+                    <div class="legend-row"><span class="legend-dot" style="background:var(--good);"></span><span class="legend-label">Complete / Good / Available</span></div>
+                    <div class="legend-row"><span class="legend-dot" style="background:var(--warn);"></span><span class="legend-label">In progress / Warning</span></div>
+                    <div class="legend-row"><span class="legend-dot" style="background:var(--info);"></span><span class="legend-label">Informational / Note</span></div>
+                    <div class="legend-row"><span class="legend-dot" style="background:var(--bad);"></span><span class="legend-label">High priority / Critical</span></div>
+                    <div class="legend-row"><span class="legend-dot" style="background:var(--accent);"></span><span class="legend-label">Interactive / Clickable</span></div>
                 </div>
             </div>
-        </section>
 
-        <section id="timeline" class="py-32 px-8 md:px-24 reveal">
-		<h2 class="text-xs font-bold mono text-green-500 mb-16 uppercase tracking-[0.4em] cyber-ray">Operational_History</h2>
-		
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-			<div>
-				<h4 class="text-[10px] mono text-gray-500 uppercase tracking-widest mb-10">Professional_Experience</h4>
-				<div class="relative pl-8 border-l border-white/5 space-y-12">
-					<div class="relative">
-						<div class="absolute -left-[36px] top-1 w-3 h-3 bg-red-500 rounded-full shadow-[0_0_10px_#ef4444] animate-pulse"></div>
-						<span class="text-[10px] mono text-red-500 font-bold tracking-widest">[ 2023 - PRESENT ]</span>
-						<h3 class="text-xl font-bold text-white mt-2">OPERATIONS SUPERVISOR | SCOTMID</h3>
-						<p class="text-sm text-gray-400 mt-2 leading-relaxed">Security-cleared keyholder managing operational integrity and compliance.</p>
-					</div>
-				</div>
-			</div>
-
-			<div>
-				<h4 class="text-[10px] mono text-gray-500 uppercase tracking-widest mb-10">Academic_Credentials</h4>
-				<div class="relative pl-8 border-l border-white/5 space-y-12">
-					<div class="relative">
-						<div class="absolute -left-[36px] top-1 w-3 h-3 bg-green-500 rounded-full shadow-[0_0_10px_#00ff41]"></div>
-						<span class="text-[10px] mono text-green-500 font-bold tracking-widest">[ 2022 - 2026 ]</span>
-						<h3 class="text-xl font-bold text-white mt-2">BENG CYBERSECURITY & FORENSICS</h3>
-						<p class="text-sm text-gray-400 mt-2 leading-relaxed">Edinburgh Napier University. Specializing in evidence acquisition.</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<footer class="py-20 px-8 md:px-24 border-t border-white/5 bg-[#030303] relative">
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-12 items-end">
-			
-			<div class="space-y-4">
-				<h4 class="text-[9px] mono text-green-500 uppercase tracking-widest">Uplink_Established</h4>
-				<a href="mailto:your-email@example.com" class="block text-lg text-white font-medium hover:text-green-500 transition-colors">your-email@example.com</a>
-				<p class="text-[10px] mono text-gray-600 uppercase">Location: Edinburgh, UK</p>
-			</div>
-
-			<div class="space-y-4">
-				<h4 class="text-[9px] mono text-green-500 uppercase tracking-widest">Network_Links</h4>
-				<div class="flex flex-col gap-2 text-sm text-gray-400 mono">
-					<a href="#" class="hover:text-white transition-colors">GitHub</a>
-					<a href="#" class="hover:text-white transition-colors">LinkedIn</a>
-				</div>
-			</div>
-
-			<div class="text-right space-y-4">
-				<div class="inline-block px-3 py-1 border border-green-500/30 text-green-500 mono text-[9px] uppercase">
-					System_Status: Secured
-				</div>
-				<p class="text-[9px] mono text-gray-700 uppercase tracking-tighter">
-					Portfolio_System_v7.0 // Secured_Build
-				</p>
-			</div>
-			
-		</div>
-	</footer>
-		
+            <div class="rail-panel">
+                <div class="rail-head">Recent Activity</div>
+                <div class="rail-body rail-list" id="recent-push">
+                    <!-- populated by JS -->
+                </div>
+                <div class="rail-foot">Recent GitHub commits on my portfolio projects.</div>
+            </div>
+        </aside>
     </div>
 
-    <div id="overlay-bg" class="fixed inset-0 bg-black/80 hidden z-[400] backdrop-blur-md"></div>
+    <!-- CASE DETAIL MODAL -->
+    <div id="case-modal" class="modal">
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-card">
+            <button class="modal-close" data-close aria-label="Close">✕</button>
+            <div class="modal-head">
+                <span class="modal-caseid" id="m-caseid"></span>
+                <span class="modal-sev" id="m-sev"></span>
+                <span class="modal-status" id="m-status"></span>
+            </div>
+            <h3 class="modal-title" id="m-title"></h3>
+            <div class="modal-when" id="m-when"></div>
+
+            <div class="modal-section">
+                <div class="modal-label">Executive summary</div>
+                <p id="m-summary"></p>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-label">Technical stack</div>
+                <div class="modal-tags" id="m-stack"></div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-label">Findings and outcomes</div>
+                <ul class="modal-list" id="m-findings"></ul>
+            </div>
+
+            <div class="modal-section" id="m-attack-wrap" style="display:none;">
+                <div class="modal-label">MITRE ATT&amp;CK</div>
+                <div class="modal-tags mitre" id="m-attack"></div>
+            </div>
+
+            <div class="modal-actions">
+                <a class="cta primary" id="m-link" href="#" target="_blank" rel="noopener">Open Repository ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- GUIDED TOUR OVERLAY -->
+    <div id="tour" class="tour" aria-hidden="true">
+        <div class="tour-backdrop" data-tour-close></div>
+        <div class="tour-card" id="tour-card">
+            <div class="tour-progress">
+                <span class="tour-step" id="tour-step-num">1</span> of <span id="tour-step-total">5</span>
+            </div>
+            <h3 class="tour-title" id="tour-title"></h3>
+            <p class="tour-text" id="tour-text"></p>
+            <div class="tour-actions">
+                <button class="cta ghost small" id="tour-skip">Skip</button>
+                <button class="cta primary small" id="tour-next">Next →</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

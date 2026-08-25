@@ -1,296 +1,494 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Core System Initialisation
-    initCanvas();
-    drawParticles();
-    decryptText();
-    initForensicStream();
-    initScrollReveal();
-    initMouseGlow();
-    initGlitchSync();
-    initNavEffects();
-});
+/* ============================================================
+   MAK Portfolio v2, SOC Dashboard theme, script
+   ============================================================ */
 
-// --- 1. DYNAMIC NAV & SCROLL INTERACTIONS ---
-function initNavEffects() {
-    const nav = document.getElementById('main-nav');
-    const progressBar = document.getElementById('scroll-progress');
-    const sections = document.querySelectorAll('section'); 
-    const navLinks = document.querySelectorAll('#main-nav a');
+/* -------- DATA: Case Files (projects) -------- */
+const CASES = [
+    {
+        id: 'CASE-2026-001',
+        title: 'Smart Dialogue-Based Intrusion Detection System',
+        subtitle: 'Honours dissertation, Sep 2025 to Apr 2026',
+        when: 'Sep 2025 – Apr 2026',
+        sev: 'sev-hi',
+        sevText: 'Critical',
+        status: 'sev-done',
+        statusText: 'Closed',
+        category: ['defensive', 'ml'],
+        summary: 'A full-stack machine learning intrusion detection system with a locally hosted LLM analyst assistant, achieving 98% weighted accuracy across 12 attack classes on the CICIDS2017 dataset.',
+        stack: ['Python', 'Flask', 'scikit-learn', 'Random Forest', 'Ollama', 'Mistral 7B', 'HTML5', 'Tailwind CSS', 'JavaScript'],
+        attack: ['T1136.001 (Local Account)', 'T1078.003 (Valid Accounts)', 'T1110 (Brute Force)'],
+        findings: [
+            '98% weighted detection accuracy at a 0.012% false positive rate on 2.1 million records',
+            'Three tier confidence workflow to reduce analyst alert fatigue',
+            'Locally hosted Mistral 7B via Ollama as an analyst assistant, no data leaves the device',
+            'Random Forest benchmarked against Linear SVM under identical conditions',
+            'Automated incident report generation as formatted Word documents'
+        ],
+        link: 'https://github.com/AhmedMKA99/Smart-Dialogue-Based-Intrusion-Detection-System-IDS-'
+    },
+    {
+        id: 'CASE-2026-002',
+        title: 'SOC Home Lab with Wazuh SIEM',
+        subtitle: 'Self initiated, ongoing',
+        when: '2026 – Present',
+        sev: 'sev-md',
+        sevText: 'High',
+        status: 'sev-done',
+        statusText: 'Live',
+        category: ['defensive'],
+        summary: 'A working SOC monitoring environment built from scratch, with Wazuh SIEM ingesting telemetry from Windows and Linux endpoints. Four attack simulations executed and one full incident report written.',
+        stack: ['Wazuh', 'Sysmon', 'auditd', 'VirtualBox', 'Windows 11', 'Ubuntu', 'PowerShell', 'Bash'],
+        attack: ['T1136.001 (Local Account)', 'T1078.003 (Valid Accounts)', 'T1110 (Brute Force)', 'T1565.001 (Data Manipulation, hosts file)'],
+        findings: [
+            'Wazuh manager, indexer and dashboard deployed on an isolated NAT network',
+            'Windows and Linux agents enrolled with detection grade telemetry (Sysmon and auditd)',
+            'Four MITRE ATT&CK aligned attack simulations captured with dashboard evidence',
+            'Full analyst style incident report (INC-2026-001) written with response actions and recommendations',
+            'FIM finding documented: Wazuh default configuration is not real time for critical paths',
+            'Formal 20 page LaTeX report accompanies the repo'
+        ],
+        link: 'https://github.com/AhmedMKA99/SOC-Home-Lab-with-SIEM'
+    },
+    {
+        id: 'CASE-2025-003',
+        title: 'Vulnerable E-Commerce Pen Testing Lab',
+        subtitle: 'Group project (Team of 6), Jan to May 2025',
+        when: 'Jan 2025 – May 2025',
+        sev: 'sev-md',
+        sevText: 'High',
+        status: 'sev-done',
+        statusText: 'Closed',
+        category: ['offensive'],
+        summary: 'A deliberately vulnerable e-commerce platform ("Sneak Mode") built on a 4 VM isolated lab. My role was full stack development plus offensive verification of the implemented vulnerabilities.',
+        stack: ['PHP', 'MySQL', 'JavaScript', 'IIS', 'Windows Server 2022', 'Kali Linux', 'OPNsense', 'Burp Suite', 'Nmap', 'Sqlmap'],
+        attack: ['SQL Injection', 'Insecure Session Handling', 'Privilege Escalation', 'OWASP A01, A03, A07'],
+        findings: [
+            '10 OWASP mapped vulnerabilities implemented and then exploited',
+            '4 VM virtualised network (Kali, Windows Server 2022, Ubuntu, OPNsense) built from scratch',
+            'Client satisfaction scores of 4 to 5 out of 5 across usability, documentation and vulnerability quality',
+            'Delivered on time in an Agile team using GitHub for version control'
+        ],
+        link: 'https://github.com/Pentest-ENU/E-Commerce-Application'
+    },
+    {
+        id: 'CASE-2024-004',
+        title: 'DevSecOps Automated Remediation Pipeline',
+        subtitle: 'Self initiated, Jan to Feb 2024',
+        when: 'Jan 2024 – Feb 2024',
+        sev: 'sev-md',
+        sevText: 'High',
+        status: 'sev-done',
+        statusText: 'Closed',
+        category: ['devsecops'],
+        summary: 'A GitHub Actions pipeline that enforces automated security gates on every commit against a real vulnerable target (OWASP Juice Shop), covering secret, dependency and container scanning plus SBOM generation.',
+        stack: ['TypeScript', 'GitHub Actions', 'Gitleaks', 'Snyk', 'Trivy', 'Anchore Syft', 'Docker', 'Node.js'],
+        attack: ['Supply chain', 'Secret disclosure', 'Known vulnerable dependencies'],
+        findings: [
+            'End to end CI/CD security gates on every commit',
+            'Gitleaks for secret scanning, Snyk for dependencies, Trivy for containers',
+            'CycloneDX v1.6 SBOM generation via Anchore Syft for supply chain visibility',
+            'Fail soft artefact archival so SARIF and JSON evidence is always preserved',
+            'Manual CVE remediation of core Node.js libraries with validation through the pipeline'
+        ],
+        link: 'https://github.com/AhmedMKA99/automated-remediation-pipeline'
+    },
+    {
+        id: 'CASE-2023-005',
+        title: 'EduChain, Academic Integrity Ledger',
+        subtitle: 'Self initiated, Oct to Nov 2023',
+        when: 'Oct 2023 – Nov 2023',
+        sev: 'sev-lo',
+        sevText: 'Informational',
+        status: 'sev-done',
+        statusText: 'Closed',
+        category: ['defensive'],
+        summary: 'A Node.js and Express blockchain implementation for tamper evident academic records, using SHA-256 hashing and a Proof of Work consensus mechanism.',
+        stack: ['Node.js', 'Express.js', 'Crypto-JS', 'SHA-256', 'REST API', 'HTML5'],
+        findings: [
+            'REST API to create, mine and query blocks',
+            'Proof of Work consensus with configurable difficulty',
+            'Recursive chain validation detecting 100% of tampering attempts in testing',
+            'Morgan structured request logging for audit'
+        ],
+        link: 'https://github.com/AhmedMKA99/EduChain-Immutable-Ledger'
+    }
+];
 
-    window.addEventListener('scroll', () => {
-        // 1. Scroll Progress Bar logic
-        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (winScroll / height) * 100;
-        if (progressBar) progressBar.style.width = scrolled + "%";
+/* -------- DATA: Ticker items -------- */
+const TICKER_ITEMS = [
+    { d: 'good', t: 'now',    m: 'System nominal, portfolio live · GitHub sync green' },
+    { d: 'info', t: '2m ago', m: 'Case CASE-2026-002 updated: attack simulations complete' },
+    { d: 'good', t: '5m ago', m: 'Rule RULE-001 (SOC Operations) match: Wazuh dashboard verified' },
+    { d: 'info', t: '11m ago', m: 'Detection accuracy holds at 98% across 12 attack classes' },
+    { d: 'warn', t: '22m ago', m: 'FIM configuration finding logged, real time monitoring not default' },
+    { d: 'good', t: '31m ago', m: 'CASE-2026-001 incident report INC-2026-001 written and pushed' },
+    { d: 'info', t: '44m ago', m: 'Repo SOC-Home-Lab-with-SIEM: milestones M1 to M7 all closed' },
+    { d: 'good', t: '1h ago',  m: 'Degree conferred: First Class Honours, Cybersecurity & Forensics' }
+];
 
-        // 2. Optimized Active Link Detection (ScrollSpy)
-        let current = "";
-        const scrollPosition = window.scrollY + 200; // Offset to detect section earlier
+/* -------- DATA: Signal stream (Live Signal panel) -------- */
+const SIGNAL_LINES = [
+    { m: '<span class="g">[OK]</span> Wazuh agent 001 heartbeat' },
+    { m: '<span class="g">[OK]</span> Wazuh agent 002 heartbeat' },
+    { m: '<span class="a">[INFO]</span> ML model loaded, 12 classes' },
+    { m: '<span class="a">[INFO]</span> Sysmon channel ingested' },
+    { m: '<span class="a">[INFO]</span> auditd rules loaded' },
+    { m: '<span class="g">[OK]</span> Threat hunting view ready' },
+    { m: '<span class="w">[WARN]</span> FIM not real time by default' },
+    { m: '<span class="a">[INFO]</span> Incident report queued' },
+    { m: '<span class="g">[OK]</span> Repo pushed, main -> origin' }
+];
 
-        sections.forEach((section) => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                current = section.getAttribute("id");
-            }
-        });
+/* -------- DATA: Recent push (right rail) -------- */
+const RECENT_PUSH = [
+    { repo: 'SOC-Home-Lab-with-SIEM', msg: 'M7 complete, full formal report (20 pages)', when: 'today' },
+    { repo: 'SOC-Home-Lab-with-SIEM', msg: 'M5 sims + INC-2026-001 written', when: 'today' },
+    { repo: 'SOC-Home-Lab-with-SIEM', msg: 'Add docs/04-linux-endpoint.md', when: 'today' },
+    { repo: 'automated-remediation-pipeline', msg: 'CycloneDX SBOM generation added', when: 'earlier' }
+];
 
-        navLinks.forEach((link) => {
-            link.classList.remove("active-link");
-            const href = link.getAttribute("href");
-            // Highlight if link points to #timeline or other current section
-            if (href && href.includes(current) && current !== "") {
-                link.classList.add("active-link");
-            }
-        });
+/* ============================================================
+   RENDER: Ticker
+   ============================================================ */
+function renderTicker() {
+    const track = document.getElementById('ticker-track');
+    if (!track) return;
+    // Duplicate items for seamless scroll
+    const items = [...TICKER_ITEMS, ...TICKER_ITEMS];
+    track.innerHTML = items.map(i => `
+        <span class="ticker-item">
+            <span class="tk-dot ${i.d}"></span>
+            <span class="tk-time">${i.t}</span>
+            ${i.m}
+        </span>
+    `).join('');
+}
 
-        // 3. Nav Shrink on scroll
-        if (window.scrollY > 50) {
-            nav.classList.add('nav-shrink');
-        } else {
-            nav.classList.remove('nav-shrink');
-        }
+/* ============================================================
+   RENDER: Cases (projects)
+   ============================================================ */
+function renderCases(filter = 'all') {
+    const container = document.getElementById('cases');
+    if (!container) return;
+    const filtered = filter === 'all'
+        ? CASES
+        : CASES.filter(c => c.category.includes(filter));
+
+    container.innerHTML = filtered.map((c, idx) => `
+        <article class="case-card" data-idx="${CASES.indexOf(c)}">
+            <div class="case-top">
+                <span class="case-id">${c.id}</span>
+                <span class="case-sev ${c.sev}">${c.sevText}</span>
+            </div>
+            <h3 class="case-title">${c.title}</h3>
+            <p class="case-desc">${c.summary}</p>
+            <div class="case-meta">
+                <span class="case-when">${c.when}</span>
+                <span class="case-open">Open details →</span>
+            </div>
+        </article>
+    `).join('');
+
+    container.querySelectorAll('.case-card').forEach(card => {
+        card.addEventListener('click', () => openCase(parseInt(card.dataset.idx, 10)));
     });
 }
 
-// --- 2. HIGH-SPEED SYSTEM BYPASS SEQUENCE ---
-window.startBypassSequence = function() {
-    const btnText = document.getElementById('btn-text');
-    const progressBar = document.getElementById('progress-bar');
-    const splash = document.getElementById('splash-screen');
-    const main = document.getElementById('portfolio-main');
-    const navName = document.getElementById('nav-operator-name');
-    const logArea = document.getElementById('init-logs');
-    const logScroll = document.getElementById('log-scroll');
+/* ============================================================
+   MODAL
+   ============================================================ */
+function openCase(idx) {
+    const c = CASES[idx];
+    if (!c) return;
+    document.getElementById('m-caseid').textContent = c.id;
+    document.getElementById('m-sev').textContent = c.sevText;
+    document.getElementById('m-sev').className = 'modal-sev ' + c.sev;
+    document.getElementById('m-status').textContent = c.statusText;
+    document.getElementById('m-status').className = 'modal-status ' + c.status;
+    document.getElementById('m-title').textContent = c.title;
+    document.getElementById('m-when').textContent = c.subtitle;
+    document.getElementById('m-summary').textContent = c.summary;
 
-    if (btnText) btnText.innerText = "AUTHENTICATING...";
-    if (progressBar) progressBar.style.width = "100%";
-    if (logArea) logArea.classList.remove('hidden');
+    document.getElementById('m-stack').innerHTML = c.stack.map(s => `<span class="chip">${s}</span>`).join('');
+    document.getElementById('m-findings').innerHTML = c.findings.map(f => `<li>${f}</li>`).join('');
 
-    const logs = [
-        "ESTABLISHING_UPLINK...",
-        "NODE_IDENTIFIED: EDINBURGH_SERVER",
-        "BYPASSING_FIREWALL...",
-        "CRACKING_HASH_0xAF44...",
-        "BIO_METRIC_SCAN: MATCHED",
-        "ACCESS_GRANTED: WELCOME_OPERATOR"
-    ];
+    const attackWrap = document.getElementById('m-attack-wrap');
+    if (c.attack && c.attack.length) {
+        attackWrap.style.display = 'block';
+        document.getElementById('m-attack').innerHTML = c.attack.map(a => `<span class="chip">${a}</span>`).join('');
+    } else {
+        attackWrap.style.display = 'none';
+    }
 
-    logs.forEach((msg, i) => {
-        setTimeout(() => {
-            if (logScroll) {
-                const p = document.createElement('p');
-                p.innerText = `> ${msg}`;
-                logScroll.prepend(p);
-            }
-            if(msg.includes("GRANTED") && splash) {
-                splash.style.animation = "shake 0.3s cubic-bezier(.36,.07,.19,.97) both";
-            }
-        }, i * 100); // High-speed log print
-    });
+    document.getElementById('m-link').href = c.link;
 
-    setTimeout(() => {
-        if (splash) splash.classList.add('vault-open');
-        if (main) {
-            main.classList.remove('opacity-0', 'invisible');
-            main.classList.add('opacity-100');
-            if (navName) setTimeout(() => navName.classList.add('name-cycle'), 200);
-        }
-        setTimeout(() => {
-            if (splash) splash.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }, 400); 
-    }, 1100); // 1.1s Final Reveal
-};
-
-// --- 3. PROJECT MODAL SYSTEM (FIXED) ---
-const modal = document.getElementById('project-modal');
-const mTitle = document.getElementById('m-title');
-const mId = document.getElementById('m-id');
-const mStatus = document.getElementById('m-status');
-const mDesc = document.getElementById('m-desc');
-const mStack = document.getElementById('m-stack');
-const mFeatures = document.getElementById('m-features');
-const mLink = document.getElementById('m-link');
-
-/**
- * FIXED: Uses data-attributes that match index.html for reliable opening.
- * @param {HTMLElement} card - The project card element.
- */
-function openProjectModal(card) {
-    // Read attributes (Ensure these match your index.html exactly)
-    const id = card.getAttribute('data-id');
-    const colorClass = card.getAttribute('data-color');
-    const status = card.getAttribute('data-status');
-    const title = card.getAttribute('data-title');
-    const desc = card.getAttribute('data-description');
-    const stack = card.getAttribute('data-stack') ? card.getAttribute('data-stack').split(',') : [];
-    const features = card.getAttribute('data-features') ? card.getAttribute('data-features').split('|') : [];
-    const link = card.getAttribute('data-link');
-
-    // Populate Modal Header
-    mId.innerText = id;
-    mId.className = `text-xs mono font-bold tracking-widest uppercase ${colorClass}`;
-    mTitle.innerText = title;
-    mDesc.innerText = desc;
-    mLink.href = link || "#";
-
-    // Populate Status
-    mStatus.innerText = status;
-    mStatus.className = status === 'COMPLETE' 
-        ? "text-[10px] mono border border-green-500/50 px-2 py-1 text-green-500 rounded-sm uppercase"
-        : "text-[10px] mono border border-amber-500/50 px-2 py-1 text-amber-500 rounded-sm uppercase";
-
-    // Populate Tech Stack Tags
-    mStack.innerHTML = '';
-    stack.forEach(tech => {
-        const span = document.createElement('span');
-        span.className = 'modal-stack-tag';
-        span.innerText = tech.trim();
-        mStack.appendChild(span);
-    });
-
-    // Populate Key Objectives
-    mFeatures.innerHTML = '';
-    features.forEach(f => {
-        const li = document.createElement('li');
-        li.className = 'feature-item';
-        li.innerText = f.trim();
-        mFeatures.appendChild(li);
-    });
-
-    // Animate Modal Open
-    modal.classList.remove('hidden');
-    setTimeout(() => modal.classList.add('modal-active'), 10);
+    const modal = document.getElementById('case-modal');
+    modal.classList.add('open');
     document.body.style.overflow = 'hidden';
 }
 
-function closeProjectModal() {
-    modal.classList.remove('modal-active');
-    document.body.style.overflow = 'auto';
-    setTimeout(() => modal.classList.add('hidden'), 300);
+function closeCase() {
+    document.getElementById('case-modal').classList.remove('open');
+    document.body.style.overflow = '';
 }
 
-// --- 4. CORE ENGINE & VISUALS ---
-function initGlitchSync() {
-    const authBtn = document.getElementById('auth-trigger');
-    const decryptName = document.getElementById('decrypt-name');
-    if (authBtn && decryptName) {
-        authBtn.addEventListener('mouseenter', () => {
-            decryptName.classList.add('glitch-active');
-            decryptName.style.animationDuration = '0.2s';
+/* ============================================================
+   FILTERS
+   ============================================================ */
+function initFilters() {
+    document.querySelectorAll('.filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderCases(btn.dataset.filter);
         });
-        authBtn.addEventListener('mouseleave', () => {
-            decryptName.classList.remove('glitch-active');
-            decryptName.style.animationDuration = '5s';
+    });
+}
+
+/* ============================================================
+   NAVIGATION (SPA-style section swap)
+   ============================================================ */
+const CRUMBS = {
+    overview: 'Overview',
+    incidents: 'Case Files',
+    'detection-rules': 'Detection Rules',
+    timeline: 'Activity Log',
+    uplink: 'Secure Uplink'
+};
+
+function navigateTo(target) {
+    document.querySelectorAll('.panel-section').forEach(s => s.classList.remove('active-section'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const section = document.getElementById(target);
+    const nav = document.querySelector(`.nav-item[data-target="${target}"]`);
+    if (section) section.classList.add('active-section');
+    if (nav) nav.classList.add('active');
+    const crumb = document.getElementById('crumb-current');
+    if (crumb && CRUMBS[target]) crumb.textContent = CRUMBS[target];
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function initNav() {
+    document.querySelectorAll('.nav-item').forEach(n => {
+        n.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateTo(n.dataset.target);
+            history.replaceState(null, '', '#' + n.dataset.target);
         });
+    });
+    // Deep link on load
+    const hash = location.hash.replace('#', '');
+    if (hash && CRUMBS[hash]) navigateTo(hash);
+}
+
+/* ============================================================
+   CLOCK
+   ============================================================ */
+function tickClock() {
+    const el = document.getElementById('clock');
+    if (!el) return;
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+    el.textContent = `${hh}:${mm}:${ss}`;
+}
+
+/* ============================================================
+   LIVE SIGNAL PANEL (staggered incoming lines)
+   ============================================================ */
+function initSignal() {
+    const stream = document.getElementById('signal-stream');
+    if (!stream) return;
+    let i = 0;
+    const push = () => {
+        const line = SIGNAL_LINES[i % SIGNAL_LINES.length];
+        const now = new Date();
+        const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+        const el = document.createElement('div');
+        el.className = 'signal-line';
+        el.innerHTML = `<span class="signal-time">${t}</span><span class="signal-msg">${line.m}</span>`;
+        stream.insertBefore(el, stream.firstChild);
+        while (stream.children.length > 8) stream.removeChild(stream.lastChild);
+        i++;
+    };
+    for (let j = 0; j < 4; j++) push();
+    setInterval(push, 2600);
+}
+
+/* ============================================================
+   RECENT PUSH (right rail)
+   ============================================================ */
+function renderRecentPush() {
+    const el = document.getElementById('recent-push');
+    if (!el) return;
+    el.innerHTML = RECENT_PUSH.map(p => `
+        <div class="push-item">
+            <div class="push-repo">${p.repo}</div>
+            <div class="push-msg">${p.msg}</div>
+            <div class="push-when">${p.when}</div>
+        </div>
+    `).join('');
+}
+
+/* ============================================================
+   THEME TOGGLE
+   ============================================================ */
+function initTheme() {
+    const html = document.documentElement;
+    const btn = document.getElementById('theme-toggle');
+    const label = btn?.querySelector('.tt-label');
+    const icon = btn?.querySelector('.tt-icon');
+    const saved = localStorage.getItem('mak-theme');
+    if (saved === 'light') html.setAttribute('data-theme', 'light');
+    updateThemeLabel();
+    btn?.addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('mak-theme', next);
+        updateThemeLabel();
+    });
+    function updateThemeLabel() {
+        const isLight = html.getAttribute('data-theme') === 'light';
+        if (label) label.textContent = isLight ? 'Light' : 'Dark';
+        if (icon)  icon.textContent  = isLight ? '☀' : '☾';
     }
 }
 
-function initForensicStream() {
-    const monitor = document.getElementById('forensic-monitor');
-    const actions = ["PACKET_INSPECT", "MEM_DUMP", "HEX_READ", "VOLATILITY_SCAN"];
-    const targets = ["192.168.1.104", "SYS_KERNEL_64", "ETH0_UPLINK"];
-
-    setInterval(() => {
-        if (monitor) {
-            const p = document.createElement('p');
-            const timestamp = new Date().toLocaleTimeString().split(' ')[0];
-            const randAction = actions[Math.floor(Math.random() * actions.length)];
-            const randTarget = targets[Math.floor(Math.random() * targets.length)];
-            const hex = Math.random().toString(16).slice(2, 8).toUpperCase();
-
-            p.innerText = `[${timestamp}] ${randAction} >> ${randTarget} :: 0x${hex}`;
-            monitor.prepend(p);
-            if (monitor.children.length > 15) monitor.lastChild.remove();
-        }
-    }, 800);
+/* ============================================================
+   MODAL close handlers
+   ============================================================ */
+function initModalClosers() {
+    document.querySelectorAll('[data-close]').forEach(el => {
+        el.addEventListener('click', closeCase);
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeCase();
+    });
 }
 
-function decryptText() {
-    const el = document.getElementById('decrypt-name');
-    const target = "Ahmed K."; 
-    const chars = "01ABCDEFGH!@#$%^&*";
-    let iteration = 0;
+/* ============================================================
+   WELCOME BANNER
+   ============================================================ */
+function initWelcomeBanner() {
+    const banner = document.getElementById('welcome-banner');
+    const dismiss = document.getElementById('dismiss-banner');
+    if (!banner) return;
 
-    const interval = setInterval(() => {
-        if (!el) return;
-        el.innerText = target.split("").map((c, i) => {
-            if (i < iteration) return target[i];
-            return chars[Math.floor(Math.random() * chars.length)];
-        }).join("");
-        if (iteration >= target.length) {
-            clearInterval(interval);
-            el.classList.add('name-cycle');
-        }
-        iteration += 1 / 3;
-    }, 40);
-}
-
-// --- 5. NETWORK PARTICLE BACKGROUND ---
-const canvas = document.getElementById('threat-map');
-const ctx = canvas.getContext('2d');
-let particles = [];
-
-function initCanvas() {
-    if (!canvas) return;
-    canvas.width = window.innerWidth; 
-    canvas.height = window.innerHeight;
-    particles = [];
-    for (let i = 0; i < 60; i++) {
-        particles.push({
-            x: Math.random() * canvas.width, 
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.4, 
-            vy: (Math.random() - 0.5) * 0.4
-        });
+    // Hide if already dismissed
+    if (localStorage.getItem('mak-banner-dismissed') === '1') {
+        banner.classList.add('hidden');
     }
+    dismiss?.addEventListener('click', () => {
+        banner.classList.add('hidden');
+        localStorage.setItem('mak-banner-dismissed', '1');
+    });
 }
 
-function drawParticles() {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = '#00ff41';
-    ctx.lineWidth = 0.5;
-
-    particles.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI * 2); ctx.stroke();
-        particles.forEach(p2 => {
-            let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-            if (dist < 150) {
-                ctx.globalAlpha = 1 - (dist / 150);
-                ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+/* ============================================================
+   HERO CTA NAV (make in-hero anchor buttons swap sections)
+   ============================================================ */
+function initHeroCTAs() {
+    document.querySelectorAll('[data-nav]').forEach(el => {
+        el.addEventListener('click', (e) => {
+            const target = el.getAttribute('data-nav');
+            if (target && CRUMBS[target]) {
+                e.preventDefault();
+                navigateTo(target);
+                history.replaceState(null, '', '#' + target);
             }
         });
     });
-    requestAnimationFrame(drawParticles);
 }
 
-function initMouseGlow() {
-    const glow = document.getElementById('mouse-glow');
-    window.addEventListener('mousemove', (e) => {
-        if (glow) {
-            glow.style.left = e.clientX - 300 + 'px';
-            glow.style.top = e.clientY - 300 + 'px';
+/* ============================================================
+   GUIDED TOUR
+   ============================================================ */
+const TOUR_STEPS = [
+    {
+        title: 'Welcome to my portfolio 👋',
+        text: 'This site is styled like a real Security Operations Centre dashboard, the kind of tool a cyber security analyst uses at work. I will walk you through it in five short steps.',
+        target: 'overview'
+    },
+    {
+        title: 'The dashboard cards up top',
+        text: 'These four cards summarise the most important facts about me. Hover any card for a plain-English explanation. For example, "98%" is how accurately my honours dissertation project can detect cyber attacks.',
+        target: 'overview'
+    },
+    {
+        title: 'My projects, as case files',
+        text: 'In the "Case Files" section, each card is a real project I built. Click any of them to see the technologies I used, what the outcome was, and a link to the code on GitHub.',
+        target: 'incidents'
+    },
+    {
+        title: 'My skills, as detection rules',
+        text: 'The "Detection Rules" section lists my technical skills grouped by area. "Core" means I use it every day; "Aware" means I know the basics. The small chips at the bottom of each card show specific tools.',
+        target: 'detection-rules'
+    },
+    {
+        title: 'How to get in touch',
+        text: 'The "Secure Uplink" section has my email, GitHub, and LinkedIn. Email is the fastest way to reach me. Thanks for taking the tour, feel free to explore.',
+        target: 'uplink'
+    }
+];
+
+let tourIdx = 0;
+
+function openTour() {
+    tourIdx = 0;
+    renderTourStep();
+    document.getElementById('tour').classList.add('open');
+}
+function closeTour() {
+    document.getElementById('tour').classList.remove('open');
+}
+function renderTourStep() {
+    const step = TOUR_STEPS[tourIdx];
+    if (!step) { closeTour(); return; }
+    if (step.target) navigateTo(step.target);
+    document.getElementById('tour-step-num').textContent = tourIdx + 1;
+    document.getElementById('tour-step-total').textContent = TOUR_STEPS.length;
+    document.getElementById('tour-title').textContent = step.title;
+    document.getElementById('tour-text').innerHTML = step.text;
+    document.getElementById('tour-next').textContent = (tourIdx === TOUR_STEPS.length - 1) ? 'Finish' : 'Next →';
+}
+function initTour() {
+    document.getElementById('start-tour')?.addEventListener('click', openTour);
+    document.getElementById('header-tour')?.addEventListener('click', openTour);
+    document.getElementById('tour-skip')?.addEventListener('click', closeTour);
+    document.querySelectorAll('[data-tour-close]').forEach(el => el.addEventListener('click', closeTour));
+    document.getElementById('tour-next')?.addEventListener('click', () => {
+        tourIdx++;
+        if (tourIdx >= TOUR_STEPS.length) { closeTour(); return; }
+        renderTourStep();
+    });
+    document.addEventListener('keydown', (e) => {
+        const tourOpen = document.getElementById('tour').classList.contains('open');
+        if (!tourOpen) return;
+        if (e.key === 'Escape') closeTour();
+        if (e.key === 'ArrowRight' || e.key === 'Enter') {
+            tourIdx++;
+            if (tourIdx >= TOUR_STEPS.length) { closeTour(); return; }
+            renderTourStep();
         }
     });
 }
 
-function initScrollReveal() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('active');
-        });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-}
-
-window.addEventListener('resize', initCanvas);
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('modal-active')) closeProjectModal();
+/* ============================================================
+   BOOT
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+    renderTicker();
+    renderCases();
+    renderRecentPush();
+    initFilters();
+    initNav();
+    initHeroCTAs();
+    initSignal();
+    initModalClosers();
+    initTheme();
+    initWelcomeBanner();
+    initTour();
+    tickClock();
+    setInterval(tickClock, 1000);
 });
