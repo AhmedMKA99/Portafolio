@@ -8,7 +8,7 @@ A personal portfolio website styled like a Security Operations Centre (SOC) dash
 
 ## About
 
-This is my personal portfolio. I am a First Class Honours cybersecurity graduate from Edinburgh Napier University, currently applying for junior cyber security roles across Scotland, ideally junior SOC analyst, detection engineering, or anything similar.
+This is my personal portfolio. I am a First Class Honours cybersecurity graduate from Edinburgh Napier University, currently applying for junior cyber security roles, ideally junior SOC analyst, detection engineering, or anything similar.
 
 Rather than a conventional scrolling landing page, this site is designed to look and feel like a real Security Operations Centre dashboard. My projects are presented as "case files", my skills are presented as "detection rules", and the layout borrows the visual language of tools like Wazuh and Splunk. A first-time visitor gets a welcome banner and a 30 second guided tour so the metaphor is clear from the start.
 
@@ -71,10 +71,3 @@ Deployed via GitHub Pages from the `main` branch. Any push to `main` updates the
 Design and code by Muhammad Ahmed Khalid.
 
 The SOC dashboard concept, layout, colour palette, and content are original work. Fonts are from Google Fonts (open source).
-
----
-
-## Contact
-
-- **GitHub:** [github.com/AhmedMKA99](https://github.com/AhmedMKA99)
-- **LinkedIn:** [linkedin.com/in/ahmed-khalid-404721395](https://www.linkedin.com/in/ahmed-khalid-404721395/)
