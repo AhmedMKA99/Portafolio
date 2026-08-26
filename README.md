@@ -50,24 +50,6 @@ Three files, one folder. That is intentional.
 
 ---
 
-## Running locally
-
-Because there is no build step, you can open it directly:
-
-```bash
-git clone https://github.com/AhmedMKA99/Portafolio.git
-cd Portafolio
-```
-
-Then either open `index.html` in your browser, or start a small local server for cleaner behaviour with the hash router:
-
-```bash
-python -m http.server 8000
-# then visit http://localhost:8000
-```
-
----
-
 ## Tech stack
 
 - HTML5, semantic markup
